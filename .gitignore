@@ -22,4 +22,4 @@ yarn-error.log*
 
 src/firebaseConfig.js
 firebase.json
-.firebaserd
+.firebaserc

@@ -15,8 +15,10 @@ class App extends Component {
     const { events } = this.props;
     const jumps = [];
     if (events) {
-      const immutableEvents = fromJS(events).filter((value, key) =>
-      key.indexOf('25-11-17') !== -1 && (value.get('type') === 0 || value.get('type') === 1));
+      let immutableEvents = fromJS(events);
+      const filter = immutableEvents.keySeq().sort().last().substring(0,8);
+      immutableEvents = immutableEvents.filter((value, key) =>
+      key.indexOf(filter) !== -1 && (value.get('type') === 0 || value.get('type') === 1));
       if (immutableEvents.size === 0 ) {
         jumps.push(<p key="fetching">No results found</p>);
       }

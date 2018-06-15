@@ -9,19 +9,33 @@ import './App.css';
 
 firebase.initializeApp(firebaseConfig);
 
-
 class App extends Component {
   render() {
     const { events } = this.props;
     // 25-11: Salto com sensor - algoritmo de aprendizagem não convergiu
     // 06-01: Salto com acelerometro do dispositivo - algoritmo convergiu com 100%
     // 23-01: Novos saltos com acelerometro do dispositivo - validação ficou em 66%
-    const datesOfJumps = ['25-11-17', '06-01-18', '23-01-18'];
+    // '11-06-18', '06-01-18', '23-01-18', '15-02-18'
+    const datesOfJumps = ['18-06-12']; //18-06-12
     const jumps = [];
     if (events) {
       let immutableEvents = fromJS(events);
+      /*const eventsToBeDeleted = immutableEvents.filterNot((value, key) =>
+      datesOfJumps.indexOf(key.substring(0, 8)) !== -1 &&
+      !value.get('acc', fromJS({})).isEmpty() && !value.get('gyro', fromJS({})).isEmpty() &&
+      (value.get('type') === 0 || value.get('type') === 1));
+      */
+      //datesOfJumps.indexOf(key.substring(0, 8)) !== -1 && (value.get('type') === 0 || value.get('type') === 1)
       immutableEvents = immutableEvents.filter((value, key) =>
-      datesOfJumps.indexOf(key.substring(0, 8)) !== -1 && (value.get('type') === 0 || value.get('type') === 1)).sort();
+      key.indexOf(datesOfJumps[0]) !== -1 &&
+      !value.get('acc', fromJS({})).isEmpty() && !value.get('gyro', fromJS({})).isEmpty()).sort();
+      /*if (eventsToBeDeleted.size > 0) {
+        console.log('removing trash on db');
+        const eventsDB = firebase.database().ref('/events');
+        eventsToBeDeleted.forEach((event, key) => {
+          eventsDB.child(key).remove();
+        });
+      }*/
       if (immutableEvents.size === 0 ) {
         jumps.push(<p key="fetching">No results found</p>);
       }
